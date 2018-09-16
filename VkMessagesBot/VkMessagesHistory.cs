@@ -63,12 +63,7 @@
 
 	public partial class History
 	{
-		public static History FromJson(string json) => JsonConvert.DeserializeObject<History>(json, VkHistory.Converter.Settings);
-	}
-
-	public static class Serialize
-	{
-		public static string ToJson(this History self) => JsonConvert.SerializeObject(self, VkHistory.Converter.Settings);
+		public static History FromJson(string json) => JsonConvert.DeserializeObject<History>(json, Converter.Settings);
 	}
 
 	internal static class Converter

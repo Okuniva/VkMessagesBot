@@ -117,11 +117,6 @@
 		public static Conversations FromJson(string json) => JsonConvert.DeserializeObject<Conversations>(json, VkConversations.Converter.Settings);
 	}
 
-	public static class Serialize
-	{
-		public static string ToJson(this Conversations self) => JsonConvert.SerializeObject(self, VkConversations.Converter.Settings);
-	}
-
 	internal static class Converter
 	{
 		public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
