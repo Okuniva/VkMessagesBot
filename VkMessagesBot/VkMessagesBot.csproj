@@ -49,10 +49,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Consts.cs" />
+    <Compile Include="MessageObject.cs" />
     <Compile Include="VkMessagesHistory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VkConversations.cs" />
+    <Compile Include="VkUsers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
