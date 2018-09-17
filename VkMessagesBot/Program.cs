@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
+using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 using VkConversations;
 using VkMessagesHistory;
 using VkUsers;
@@ -29,6 +31,7 @@ namespace VkMessagesBot
 			Console.Title = me.Username;
 
 			Bot.OnMessage += BotOnMessageReceived;
+			Bot.OnCallbackQuery += BotOnCallbackQueryReceived;
 
 			Bot.StartReceiving(Array.Empty<UpdateType>());
 			Console.WriteLine($"Start listening for @{me.Username}");
@@ -116,9 +119,22 @@ namespace VkMessagesBot
 									@"&user_ids=" + messageObj.FromId;
 								var userJson = await Client.GetStringAsync(userUrl);
 								var user = Users.FromJson(userJson);
+
+
+								
+								await Bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
+								await Task.Delay(500); // simulate longer running task
+								var inlineKeyboard = new InlineKeyboardMarkup(new[]
+								{
+									new [] // first row
+									{
+										InlineKeyboardButton.WithCallbackData("Send"),
+									}
+								});
+
 								await Bot.SendTextMessageAsync(message.Chat.Id, "от: " + user.Response[0].FirstName + " "
 								                                                + user.Response[0].LastName + " текст: "
-								                                                + messageObj.Text);
+								                                                + messageObj.Text, replyMarkup: inlineKeyboard);
 							}
 						}
 
@@ -138,6 +154,15 @@ namespace VkMessagesBot
 					EnableGetMessages = true;
 					break;;
 			}
+		}
+
+		private static async void BotOnCallbackQueryReceived(object sender, CallbackQueryEventArgs callbackQueryEventArgs)
+		{
+			var callbackQuery = callbackQueryEventArgs.CallbackQuery;
+
+			await Bot.SendTextMessageAsync(
+				callbackQuery.Message.Chat.Id,
+				$"Received send click");
 		}
 	}
 }
